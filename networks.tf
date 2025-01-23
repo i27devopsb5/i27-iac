@@ -17,6 +17,18 @@ resource "google_compute_subnetwork" "i27-ecommerce-subnets" {
   network = google_compute_network.i27-ecommerce-vpc.self_link
 }
 
+# Creating firewall.
+# We need to open port, 80 , 8080, 22, 9000
+
+resource "google_compute_firewall" "name" {
+  name = "i27-allow-ssh-http-jenkins-ports"
+  network = google_compute_network.i27-ecommerce-vpc.name
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "8080", "9000", "22"]
+  }
+  source_ranges = var.source_ranges
+}
 
 
 # # create subnet-1

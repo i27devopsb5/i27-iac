@@ -1,0 +1,10 @@
+[jenkins-master]
+10.2.0.12
+[jenkins-master:vars]
+ansible_user=maha
+ansible_ssh_private_key_file=/home/maha/ssh-key
+[jenkins-slave]
+10.2.0.13
+[jenkins-slave:vars]
+ansible_user=maha
+ansible_ssh_private_key_file=/home/maha/ssh-key

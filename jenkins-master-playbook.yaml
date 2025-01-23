@@ -1,0 +1,38 @@
+# This playbook is used to install Jenkins and the prerequiste java 
+---
+- hosts: jenkins-master # all
+  become: true
+  tasks:
+  - name: Install java 
+  # apt install openjdk-17-jre
+    apt: #ansible.builtin.apt:
+      name: openjdk-17-jre
+      update_cache: yes
+  - name: Add Jenkins key
+  # https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    apt_key:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      state: present
+  - name: Add Jenkins Repo
+    apt_repository:
+      repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+      state: present
+  - name: Install Jenkins
+    apt: 
+      name: jenkins
+      state: present
+  - name: Start Jenkins Service
+    service:
+      name: jenkins
+      state: started
+  - name: Enable Jenkins Service
+    service: 
+      name: jenkins
+      enabled: yes
+  - name: Cat the initialAdminPassword file
+    shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    register: initial_admin_password
+    # the above step registers the outpur of the previous step in a variable called initial_admin_password
+  - name: Display the content of initialAdminPassword
+    debug: 
+      var: initial_admin_password.stdout_lines
